@@ -1,4 +1,7 @@
 require("@nomicfoundation/hardhat-toolbox");
+require("@nomicfoundation/hardhat-chai-matchers");
+require("@nomiclabs/hardhat-ethers");
+require("@nomiclabs/hardhat-etherscan");
 
 const secret = require("./secret.json");
 
@@ -9,6 +12,11 @@ module.exports = {
     goerli: {
       url: secret.url, // endpoint alchemy
       accounts: [secret.private_key], // private key metamask wallet
+    },
+  },
+  etherscan: {
+    apiKey: {
+      goerli: secret.etherscanApiKey, // api key alchemy
     },
   },
 };
