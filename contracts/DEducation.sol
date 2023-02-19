@@ -7,31 +7,36 @@ import "@openzeppelin/contracts/access/Ownable.sol";
 // import "hardhat/console.sol";
 
 contract DEducation is Ownable {
-    struct Transcript {
-        string Semester;
-        string Subject;
+    struct StudentTranscript {
+        address StudentAddress;
+        string Classroom;
+        string HashCode;
     }
 
-    event AddNewTranscript(
-        address _studentAddress,
-        string _hashcode,
-        string _semester,
-        string _subject
-    );
+    event AddNewTranscriptForClass(string _classroom, string _hashcode);
+    event AddNewTranscriptForStudents(StudentTranscript[] _studentTranscripts);
 
-    mapping(address => mapping(address => mapping(string => Transcript)))
-        public TranscriptUploaded;
+    mapping(address => mapping(string => string)) public TranscriptForClass;
+    mapping(address => mapping(address => mapping(string => string)))
+        public TranscriptForStudents;
 
-    function addNewTranscript(
-        address _studentAddress,
-        string memory _hashcode,
-        string memory _semester,
-        string memory _subject
+    function addNewTranscriptForClass(
+        string memory _classroom,
+        string memory _hashcode
     ) public {
-        TranscriptUploaded[msg.sender][_studentAddress][_hashcode] = Transcript(
-            _semester,
-            _subject
-        );
-        emit AddNewTranscript(_studentAddress, _hashcode, _semester, _subject);
+        TranscriptForClass[msg.sender][_classroom] = _hashcode;
+        emit AddNewTranscriptForClass(_classroom, _hashcode);
+    }
+
+    function addNewTranscriptForStudents(
+        StudentTranscript[] memory _studentTranscripts
+    ) public {
+        for (uint256 i = 0; i < _studentTranscripts.length; i++) {
+            StudentTranscript memory studentTranscript = _studentTranscripts[i];
+            TranscriptForStudents[msg.sender][studentTranscript.StudentAddress][
+                studentTranscript.Classroom
+            ] = studentTranscript.HashCode;
+        }
+        emit AddNewTranscriptForStudents(_studentTranscripts);
     }
 }
