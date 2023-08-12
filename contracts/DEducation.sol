@@ -24,7 +24,7 @@ contract DEducation is Ownable {
         string memory _classroom,
         string memory _hashcode
     ) public {
-        TranscriptForClass[msg.sender][_classroom] = _hashcode;
+        TranscriptForClass[_msgSender()][_classroom] = _hashcode;
         emit AddNewTranscriptForClass(_classroom, _hashcode);
     }
 
@@ -33,9 +33,9 @@ contract DEducation is Ownable {
     ) public {
         for (uint256 i = 0; i < _studentTranscripts.length; i++) {
             StudentTranscript memory studentTranscript = _studentTranscripts[i];
-            TranscriptForStudents[msg.sender][studentTranscript.StudentAddress][
-                studentTranscript.Classroom
-            ] = studentTranscript.HashCode;
+            TranscriptForStudents[_msgSender()][
+                studentTranscript.StudentAddress
+            ][studentTranscript.Classroom] = studentTranscript.HashCode;
         }
         emit AddNewTranscriptForStudents(_studentTranscripts);
     }
